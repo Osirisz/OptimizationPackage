@@ -5,13 +5,13 @@
  */
 package optimization;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author EARTH
  */
-public class Match3pair {
+public class NewClass {
     public static void main(String[] args) {
         int cheapIndex = 5;
         ArrayList<Integer> arrayPreCheckResource = new ArrayList<Integer>(); //เก็บintก่อนไปcheck
@@ -108,7 +108,6 @@ public class Match3pair {
             }
             break;
         }
-        System.out.println("end");
         System.out.println(arrayPostCheckResource);
     }
 }
