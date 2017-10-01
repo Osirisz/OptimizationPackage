@@ -59,10 +59,7 @@ public class Match2pair {
                     }   
                     if(((packageMemory[firstValue-1]+packageMemory[secondValue-1])-0.6)>=memory && (packageCpu[firstValue-1]+packageCpu[secondValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
                         totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1];
-                        if(cheapIndex == -1){
-                            cheapIndex = 0;
-                        }
-                        else if(totalCostPackage < packageCost[cheapIndex]){
+                        if(totalCostPackage <= packageCost[cheapIndex]){
                             newCheapIndex = firstValue+""+secondValue;
                             arrayPostCheckResource.add(newCheapIndex);
                         }

@@ -16,12 +16,18 @@ public class Match3pair {
         int cheapIndex = 5;
         ArrayList<Integer> arrayPreCheckResource = new ArrayList<Integer>(); //เก็บintก่อนไปcheck
         ArrayList<String> arrayPostCheckResource = new ArrayList<String>(); //เก็บstringคู่ที่checkแล้ว
+        arrayPostCheckResource.add(cheapIndex+"");
         double packageMemory[] = new double[]{0.5,1,2,4,8,16,32,48,64,16,32,64,128,224};
         double packageCpu[] = new double[]{1,1,2,2,4,8,12,16,20,2,4,8,16,32,};
         double packageCost[] = new double[]{5,10,20,40,80,160,320,480,640,120,240,480,960,1680};
         double cpu = 2;
         double memory = 4;
         double totalCostPackage;
+        int lengthLastPackage;
+        String lastPackage;
+        int positionPackage;
+        String orderPackage;
+        double costLastPackage;
         String newCheapIndex;
         while(arrayPreCheckResource.isEmpty()){ //checkว่าถ้าว่างให้เข้ามาทำ
             for (int i = 1; i < cheapIndex; i++) { //loop add 1-cheapIndex-1(ตัวก่อนสุดท้าย)เข้ามาเพื่อcheck
@@ -44,6 +50,32 @@ public class Match3pair {
                     System.out.println("size"+arrayPreCheckResource.size()); //size
                     System.out.println(j+"=="+(arrayPreCheckResource.size())); //ไล่ค่าแต่ละครั้ง
                     
+                    if(((packageMemory[firstValue-1]+packageMemory[secondValue-1]+packageMemory[thirdValue-1])-0.9)>=memory && (packageCpu[firstValue-1]+packageCpu[secondValue-1]+packageCpu[thirdValue-1])>=cpu){
+                        System.out.println("*****************************************");
+                        totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1]+packageCost[thirdValue-1];
+                        if(cheapIndex == -1){
+                            cheapIndex = 0;
+                        }
+                        else if(totalCostPackage <= packageCost[cheapIndex-1]){
+                            System.out.println("-----------------------------------------------");
+                            System.out.println(firstValue+""+secondValue+""+thirdValue);
+                            System.out.println(totalCostPackage);
+                            lengthLastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1).length();
+                            lastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1);
+                            costLastPackage = 0;
+                            for (int i = 0; i < lengthLastPackage; i++) {
+                                orderPackage = lastPackage.substring(i, i + 1);
+                                positionPackage = Integer.parseInt(orderPackage);
+                                costLastPackage += packageCost[positionPackage - 1];
+                            }
+                            if(totalCostPackage<=costLastPackage){
+                                System.out.println("Add");
+                                newCheapIndex = firstValue+""+secondValue+""+thirdValue;
+                                arrayPostCheckResource.add(newCheapIndex);
+                            }
+                        }
+
+                    }
                     
                     if(arrayPreCheckResource.size()==1){ //ถ้าในarrayเหลือตัวสุดท้ายให้หยุด
                         System.out.println("stop");
@@ -56,6 +88,31 @@ public class Match3pair {
                             System.out.println("second"+secondValue);
                             System.out.println("size"+arrayPreCheckResource.size());
                             System.out.println(arrayPreCheckResource);
+                            if (((packageMemory[firstValue - 1] + packageMemory[secondValue - 1] + packageMemory[thirdValue] - 1) - 0.9) >= memory && (packageCpu[firstValue - 1] + packageCpu[secondValue - 1] + packageCpu[thirdValue - 1]) >= cpu) { //เลือกคู่ที่จะไปadd
+                                System.out.println("*****************************************");
+                                totalCostPackage = packageCost[firstValue - 1] + packageCost[secondValue - 1] + packageCost[thirdValue - 1];
+                                if (cheapIndex == -1) {
+                                    cheapIndex = 0;
+                                } 
+                                else if (totalCostPackage <= packageCost[cheapIndex - 1]) {
+                                    System.out.println("-----------------------------------------------");
+                                    System.out.println(firstValue + "" + secondValue + "" + thirdValue);
+                                    System.out.println(totalCostPackage);
+                                    lengthLastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size() - 1).length();
+                                    lastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size() - 1);
+                                    costLastPackage = 0;
+                                    for (int i = 0; i < lengthLastPackage; i++) {
+                                        orderPackage = lastPackage.substring(i, i + 1);
+                                        positionPackage = Integer.parseInt(orderPackage);
+                                        costLastPackage += packageCost[positionPackage - 1];
+                                    }
+                                    if (totalCostPackage <= costLastPackage) {
+                                        System.out.println("Add");
+                                        newCheapIndex = firstValue + "" + secondValue + "" + thirdValue;
+                                        arrayPostCheckResource.add(newCheapIndex);
+                                    }
+                                }
+                            }
                         }
                         
                         if (!arrayPreCheckResource.isEmpty() && secondValue == cheapIndex-1) {
@@ -65,18 +122,6 @@ public class Match3pair {
                             System.out.println(arrayPreCheckResource);
                             System.out.println();
                         }                       
-                    }   
-                    if(((packageMemory[firstValue-1]+packageMemory[secondValue-1]+packageMemory[thirdValue]-1)-0.9)>=memory && (packageCpu[firstValue-1]+packageCpu[secondValue-1]+packageCpu[thirdValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
-                        totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1]+packageCost[thirdValue-1];
-                        if(cheapIndex == -1){
-                            cheapIndex = 0;
-                            System.out.println("test");
-                        }
-                        else if(totalCostPackage < packageCost[cheapIndex]){
-                            newCheapIndex = firstValue+""+secondValue+""+thirdValue;
-                            arrayPostCheckResource.add(newCheapIndex);
-                            System.out.println("5555");
-                        }
                     }
                 }                
             }

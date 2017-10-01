@@ -17,13 +17,16 @@ public class Optimization {
         double totalCostPackage;
         String newCheapIndex;
         int cheapIndex = -1;
+        int lengthLastPackage;
+        String lastPackage;
+        int positionPackage;
+        String orderPackage;
+        double costLastPackage;
         //1vm
-
         for (int i = 0; i < packageCpu.length; i++) {
             if((packageMemory[i]-0.3)>=memory && packageCpu[i]>=cpu){
                 if(cheapIndex == -1){
                     cheapIndex = i+1;
-                    System.out.println("test");
                 }
                 break;
             }
@@ -62,14 +65,28 @@ public class Optimization {
                         }                       
                     }   
                     if(((packageMemory[firstValue-1]+packageMemory[secondValue-1])-0.6)>=(memory) && (packageCpu[firstValue-1]+packageCpu[secondValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
+                        System.out.println("*****************************************");
                         totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1];
                         if(cheapIndex == -1){
                             cheapIndex = 0;
                         }
-                        else if(totalCostPackage < packageCost[cheapIndex]){
-                            System.err.println("Add");
-                            newCheapIndex = firstValue+""+secondValue;
-                            arrayPostCheckResource.add(newCheapIndex);
+                        else if(totalCostPackage <= packageCost[cheapIndex-1]){
+                            System.out.println("-----------------------------------------------");
+                            System.out.println(firstValue+""+secondValue);
+                            System.out.println(totalCostPackage);
+                            lengthLastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1).length();
+                            lastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1);
+                            costLastPackage = 0;
+                            for (int i = 0; i < lengthLastPackage; i++) {
+                                orderPackage = lastPackage.substring(i, i + 1);
+                                positionPackage = Integer.parseInt(orderPackage);
+                                costLastPackage += packageCost[positionPackage - 1];
+                            }
+                            if(totalCostPackage<costLastPackage){
+                                System.out.println("Add");
+                                newCheapIndex = firstValue+""+secondValue;
+                                arrayPostCheckResource.add(newCheapIndex);
+                            }
                         }
                     }
                 }                
@@ -111,6 +128,30 @@ public class Optimization {
                             System.out.println("second"+secondValue);
                             System.out.println("size"+arrayPreCheckResource.size());
                             System.out.println(arrayPreCheckResource);
+                            if (((packageMemory[firstValue - 1] + packageMemory[secondValue - 1] + packageMemory[thirdValue] - 1) - 0.9) >= memory && (packageCpu[firstValue - 1] + packageCpu[secondValue - 1] + packageCpu[thirdValue - 1]) >= cpu) { //เลือกคู่ที่จะไปadd
+                                System.out.println("*****************************************");
+                                totalCostPackage = packageCost[firstValue - 1] + packageCost[secondValue - 1] + packageCost[thirdValue - 1];
+                                if (cheapIndex == -1) {
+                                    cheapIndex = 0;
+                                } else if (totalCostPackage <= packageCost[cheapIndex - 1]) {
+                                    System.out.println("-----------------------------------------------");
+                                    System.out.println(firstValue + "" + secondValue + "" + thirdValue);
+                                    System.out.println(totalCostPackage);
+                                    lengthLastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size() - 1).length();
+                                    lastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size() - 1);
+                                    costLastPackage = 0;
+                                    for (int i = 0; i < lengthLastPackage; i++) {
+                                        orderPackage = lastPackage.substring(i, i + 1);
+                                        positionPackage = Integer.parseInt(orderPackage);
+                                        costLastPackage += packageCost[positionPackage - 1];
+                                    }
+                                    if (totalCostPackage < costLastPackage) {
+                                        System.out.println("Add");
+                                        newCheapIndex = firstValue + "" + secondValue + "" + thirdValue;
+                                        arrayPostCheckResource.add(newCheapIndex);
+                                    }
+                                }
+                            }
                         }
                         
                         if (!arrayPreCheckResource.isEmpty() && secondValue == cheapIndex-1) {
@@ -120,17 +161,30 @@ public class Optimization {
                             System.out.println(arrayPreCheckResource);
                             System.out.println();
                         }                       
-                    }   
+                    } 
                     if(((packageMemory[firstValue-1]+packageMemory[secondValue-1]+packageMemory[thirdValue]-1)-0.9)>=memory && (packageCpu[firstValue-1]+packageCpu[secondValue-1]+packageCpu[thirdValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
+                        System.out.println("*****************************************");
                         totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1]+packageCost[thirdValue-1];
                         if(cheapIndex == -1){
                             cheapIndex = 0;
-                            System.out.println("test");
                         }
-                        else if(totalCostPackage < packageCost[cheapIndex]){
-                            newCheapIndex = firstValue+""+secondValue+""+thirdValue;
-                            arrayPostCheckResource.add(newCheapIndex);
-                            System.out.println("5555");
+                        else if(totalCostPackage <= packageCost[cheapIndex-1]){
+                            System.out.println("-----------------------------------------------");
+                            System.out.println(firstValue+""+secondValue+""+thirdValue);
+                            System.out.println(totalCostPackage);
+                            lengthLastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1).length();
+                            lastPackage = arrayPostCheckResource.get(arrayPostCheckResource.size()-1);
+                            costLastPackage = 0;
+                            for (int i = 0; i < lengthLastPackage; i++) {
+                                orderPackage = lastPackage.substring(i, i + 1);
+                                positionPackage = Integer.parseInt(orderPackage);
+                                costLastPackage += packageCost[positionPackage - 1];
+                            }
+                            if(totalCostPackage<costLastPackage){
+                                System.out.println("Add");
+                                newCheapIndex = firstValue+""+secondValue+""+thirdValue;
+                                arrayPostCheckResource.add(newCheapIndex);
+                            }
                         }
                     }
                 }                
@@ -139,9 +193,9 @@ public class Optimization {
         }
         
         System.out.println("Cheap : " + cheapIndex);
-        System.out.println("CPU : " + packageCpu[cheapIndex]);
-        System.out.println("Memory : " + packageMemory[cheapIndex]);
-        System.out.println("Cost : " + packageCost[cheapIndex]); 
+        System.out.println("CPU : " + packageCpu[cheapIndex-1]);
+        System.out.println("Memory : " + packageMemory[cheapIndex-1]);
+        System.out.println("Cost : " + packageCost[cheapIndex-1]); 
         System.out.println("List Package : " + arrayPostCheckResource);
     }
     
