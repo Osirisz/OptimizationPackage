@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author EARTH
  */
-public class test {
+public class Match2pair {
     public static void main(String[] args) {
         int cheapIndex = 5;
         ArrayList<Integer> arrayPreCheckResource = new ArrayList<Integer>(); //เก็บintก่อนไปcheck
@@ -57,7 +57,7 @@ public class test {
                             System.out.println();
                         }                       
                     }   
-                    if(((packageMemory[firstValue-1]+packageMemory[secondValue-1])-0.6)>=(memory) && (packageCpu[firstValue-1]+packageCpu[secondValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
+                    if(((packageMemory[firstValue-1]+packageMemory[secondValue-1])-0.6)>=memory && (packageCpu[firstValue-1]+packageCpu[secondValue-1])>=cpu){ //เลือกคู่ที่จะไปadd
                         totalCostPackage = packageCost[firstValue-1]+packageCost[secondValue-1];
                         if(cheapIndex == -1){
                             cheapIndex = 0;
@@ -66,7 +66,6 @@ public class test {
                             newCheapIndex = firstValue+""+secondValue;
                             arrayPostCheckResource.add(newCheapIndex);
                         }
-                        break;
                     }
                 }                
             }
