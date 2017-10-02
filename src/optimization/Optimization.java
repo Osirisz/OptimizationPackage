@@ -3,14 +3,20 @@ package optimization;
 import java.util.*;
 public class Optimization {
     public static void main(String[] args) {
+        int modeIntensive = 0; //0=cpu, 1=memory
         Scanner sc = new Scanner(System.in);
         System.out.println("Insert cpu(core): ");
         int cpu = sc.nextInt();
         System.out.println("Insert memory(GB): ");
         int memory = sc.nextInt();
+        System.out.println("Mode intensive(0 = CPU intensive, 1 = Memory Intensive): ");
+        modeIntensive = sc.nextInt();
+        while(modeIntensive!=0 && modeIntensive!=1){
+            System.out.println("Please input 0 or 1 only.");
+            modeIntensive = sc.nextInt();
+        }        
         ArrayList<Integer> arrayPreCheckResource = new ArrayList<Integer>(); //เก็บintก่อนไปcheck
         ArrayList<String> arrayPostCheckResource = new ArrayList<String>(); //เก็บstringคู่ที่checkแล้ว
-        
         double packageMemory[] = new double[]{0.5,1,2,4,8,16,32,48,64,16,32,64,128,224};
         double packageCpu[] = new double[]{1,1,2,2,4,8,12,16,20,2,4,8,16,32,};
         double packageCost[] = new double[]{5,10,20,40,80,160,320,480,640,120,240,480,960,1680};
@@ -22,6 +28,12 @@ public class Optimization {
         int positionPackage;
         String orderPackage;
         double costLastPackage;
+        String finalPackage = "";
+        String firstPackage;
+        int lengthFirstPackage;
+        double resourcePackage;
+        double finalResource = 0;
+       
         //1vm
         for (int i = 0; i < packageCpu.length; i++) {
             if((packageMemory[i]-0.3)>=memory && packageCpu[i]>=cpu){
@@ -78,6 +90,9 @@ public class Optimization {
                             costLastPackage += packageCost[positionPackage - 1];
                         }
                         if (totalCostPackage <= costLastPackage) {
+                            if (lengthLastPackage==1) {
+                                arrayPostCheckResource.remove(0);
+                            }
                             newCheapIndex = firstValue + "" + secondValue;
                             arrayPostCheckResource.add(newCheapIndex);
                         }
@@ -168,11 +183,68 @@ public class Optimization {
             break;
         }
         
+        //check number of package
+        if(arrayPostCheckResource.size()==1){
+            finalPackage = arrayPostCheckResource.get(0);
+        }
+        else {
+            if(modeIntensive == 0 ){ //cpu
+                while(!arrayPostCheckResource.isEmpty()){
+                    System.out.println("---------------------------------");
+                    lengthFirstPackage = arrayPostCheckResource.get(0).length();
+                    firstPackage = arrayPostCheckResource.get(0);
+                    resourcePackage = 0;
+                    for (int i = 0; i < lengthFirstPackage; i++) {
+                        orderPackage = firstPackage.substring(i, i + 1);
+                        positionPackage = Integer.parseInt(orderPackage);
+                        resourcePackage += packageCpu[positionPackage - 1];
+                    }
+
+                    if (finalResource == 0) {
+                        finalResource = resourcePackage;
+                        finalPackage = firstPackage;
+                    }
+                    else {
+                        if (finalResource<resourcePackage) {
+                            finalResource = resourcePackage;
+                            finalPackage = firstPackage;
+                        }
+                    }
+                    arrayPostCheckResource.remove(0);
+                }                
+            }
+            else{
+                while(!arrayPostCheckResource.isEmpty()){
+                    lengthFirstPackage = arrayPostCheckResource.get(0).length();
+                    firstPackage = arrayPostCheckResource.get(0);
+                    resourcePackage = 0;
+                    for (int i = 0; i < lengthFirstPackage; i++) {
+                        orderPackage = firstPackage.substring(i, i + 1);
+                        positionPackage = Integer.parseInt(orderPackage);
+                        resourcePackage += packageMemory[positionPackage - 1];
+                    }
+
+                    if (finalResource == 0) {
+                        finalResource = resourcePackage;
+                        finalPackage = firstPackage;
+                    }
+                    else {
+                        if (finalResource<resourcePackage) {
+                            finalResource = resourcePackage;
+                            finalPackage = firstPackage;
+                        }
+                    }
+                    arrayPostCheckResource.remove(0);
+                }  
+            }
+        }
+        
         System.out.println("Cheap : " + cheapIndex);
         System.out.println("CPU : " + packageCpu[cheapIndex-1]);
         System.out.println("Memory : " + packageMemory[cheapIndex-1]);
         System.out.println("Cost : " + packageCost[cheapIndex-1]); 
         System.out.println("List Package : " + arrayPostCheckResource);
+        System.out.println("Final package : "+finalPackage);
     }
     
 }
